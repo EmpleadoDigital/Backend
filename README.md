@@ -12,15 +12,22 @@ prisma/
 src/
   core/
     config/         # Validacion Zod (.env) y AppConfigService tipado
-    decorators/     # Decoradores transversales (auth, roles, plan)
+    decorators/     # Decoradores transversales (@Public, @CurrentUser)
     filters/        # GlobalHttpExceptionFilter uniforme
-    guards/         # Guards globales y de seguridad
+    guards/         # JwtAuthGuard global y guards de seguridad
     interceptors/   # Interceptores de contexto y auditoria
     prisma/         # PrismaModule y PrismaService globales
     security/       # Cifrado AES-256-GCM y contexto multi-tenant (BE-05)
     core.module.ts
   modules/
-    health/         # Modulo de referencia por capas
+    auth/           # Autenticacion local (Argon2id, JWT, Refresh rotativo, Lockout)
+      controllers/  # Capa HTTP (/api/auth/*)
+      dto/          # DTOs validados con class-validator / @ApiProperty
+      entities/     # Payloads JWT y AuthenticatedUser
+      repositories/ # Persistencia atomica en Prisma ORM
+      services/     # AuthService, PasswordService, TokenService
+      auth.module.ts
+    health/         # Modulo de estado operativo por capas
       controllers/  # Capa de presentacion HTTP y contratos Swagger
       dto/          # DTOs validados con class-validator / @ApiProperty
       entities/     # Entidades y tipos de dominio
@@ -64,6 +71,11 @@ npm run start:dev
 
 - `GET /api/health` - Estado operativo de la API y conectividad Prisma/PostgreSQL.
 - `GET /api/docs` - Documentacion interactiva Swagger / OpenAPI (`GET /api/docs-json` para esquema JSON).
+- `POST /api/auth/register` - Registro local de negocio y usuario `OWNER` (Argon2id + Plan Gratis).
+- `POST /api/auth/login` - Inicio de sesion local (con lockout tras 5 fallos por 15 min).
+- `POST /api/auth/refresh` - Rotacion de Refresh Token con deteccion de reuso por familia.
+- `POST /api/auth/logout` - Revocacion de sesion actual o todas las sesiones.
+- `GET /api/auth/me` - Perfil autenticado del usuario y resumen del tenant.
 
 ## Comandos utiles
 
