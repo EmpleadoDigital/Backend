@@ -33,6 +33,7 @@ describe('Bootstrap & Core Security (e2e)', () => {
       expect.objectContaining({
         status: 'ok',
         service: 'empleado-digital-backend',
+        database: 'connected',
       }),
     );
     expect(res.headers['x-content-type-options']).toBe('nosniff');

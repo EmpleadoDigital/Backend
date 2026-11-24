@@ -10,12 +10,13 @@ export class HealthService {
     private readonly appConfig: AppConfigService,
   ) {}
 
-  getHealth(): HealthStatus {
-    const snapshot = this.healthRepository.getRuntimeSnapshot();
+  async getHealth(): Promise<HealthStatus> {
+    const snapshot = await this.healthRepository.getRuntimeSnapshot();
     return {
       status: 'ok',
       service: snapshot.service,
       environment: this.appConfig.nodeEnv,
+      database: snapshot.database,
       uptimeSeconds: snapshot.uptimeSeconds,
       timestamp: snapshot.timestamp,
       version: snapshot.version,
