@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import type { HealthStatus } from '../entities/health-status.entity.js';
+import type { DatabaseStatus, HealthStatus } from '../entities/health-status.entity.js';
 
 export class HealthResponseDto implements HealthStatus {
   @ApiProperty({ example: 'ok' })
@@ -10,6 +10,12 @@ export class HealthResponseDto implements HealthStatus {
 
   @ApiProperty({ example: 'development' })
   environment: string;
+
+  @ApiProperty({
+    enum: ['connected', 'disconnected', 'not_configured'],
+    example: 'connected',
+  })
+  database: DatabaseStatus;
 
   @ApiProperty({ example: 12.45 })
   uptimeSeconds: number;

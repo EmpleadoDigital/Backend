@@ -4,10 +4,12 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AppConfigModule } from './config/app-config.module.js';
 import { AppConfigService } from './config/app-config.service.js';
 import { GlobalHttpExceptionFilter } from './filters/http-exception.filter.js';
+import { PrismaModule } from './prisma/prisma.module.js';
 
 @Module({
   imports: [
     AppConfigModule,
+    PrismaModule,
     ThrottlerModule.forRootAsync({
       inject: [AppConfigService],
       useFactory: (config: AppConfigService) => ({
@@ -30,6 +32,6 @@ import { GlobalHttpExceptionFilter } from './filters/http-exception.filter.js';
       useClass: GlobalHttpExceptionFilter,
     },
   ],
-  exports: [AppConfigModule],
+  exports: [AppConfigModule, PrismaModule],
 })
 export class CoreModule {}

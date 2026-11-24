@@ -9,9 +9,9 @@ export class HealthController {
   constructor(private readonly healthService: HealthService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Verifica el estado operativo de la API local' })
+  @ApiOperation({ summary: 'Verifica el estado operativo de la API local y base de datos' })
   @ApiOkResponse({ type: HealthResponseDto })
-  check(): HealthResponseDto {
+  check(): Promise<HealthResponseDto> {
     return this.healthService.getHealth();
   }
 }
