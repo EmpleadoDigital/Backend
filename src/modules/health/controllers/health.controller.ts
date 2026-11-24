@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Public } from '../../../core/decorators/public.decorator.js';
 import { HealthResponseDto } from '../dto/health-response.dto.js';
 import { HealthService } from '../services/health.service.js';
 
@@ -8,6 +9,7 @@ import { HealthService } from '../services/health.service.js';
 export class HealthController {
   constructor(private readonly healthService: HealthService) {}
 
+  @Public()
   @Get()
   @ApiOperation({ summary: 'Verifica el estado operativo de la API local y base de datos' })
   @ApiOkResponse({ type: HealthResponseDto })
